@@ -1,0 +1,48 @@
+/* CSci4061 F2018 Assignment 
+3
+section: 1 and 2
+ 
+date: 12/12/18
+name: Qi Mao, Matthew Warns, Yihan Zhou
+ 
+id: maoxx241, warn0249, zhou1298 */
+
+Program is compiled with this makefile (included in .tar):
+
+CC = gcc
+
+CFLAGS = -D_REENTRANT
+
+LDFLAGS = -lpthread -pthread
+
+
+
+web_server: server.c cache.c logger.c request.c
+
+	${CC} -o web_server -g server.c util.o cache.c logger.c request.c ${LDFLAGS}
+
+
+
+clean:
+
+	rm web_server
+
+
+The program creates worker threads and dispatcher threads.
+THe dispatch threads interact with the client and enqueue requests.
+THe worker threads consume the queue, get the files from disk or 
+from the cache, and return the files to the client.
+
+For the cache, we store the time that each value was used at.  We used a least
+recently used replacement scheme.  THis means that if the cache is full, we find
+the entry that was used the least recently and replace that.
+
+TO dynamically alter the number of threads, detect and record the number of requests 
+processed by each thread in the past 60 seconds, if half of the threads processed 
+fewer than 10 requests, reduce the number of threads by half, otherwise the number of threads is doubled.
+
+Matthew:  Initial implementation for warmup.
+Qi and Yihan: Final implementation.
+
+
+
